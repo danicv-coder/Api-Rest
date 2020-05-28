@@ -1,32 +1,33 @@
 const express = require('express')
 const router = express.Router()
-const Orders = require('../models/Orders')
+const Meals = require('../models/Meals')
 
 router.get('/', (req, res) => {
-    Orders.find()
+    Meals.find()
     .exec()
     .then(x => res.status(200).send(x))// find me devolvera un objeto querey y exce me ejecuta la query
 })
 
 router.get('/:id', (req, res) => {
-    Orders.findById(req.params.id)
+    Meals.findById(req.params.id)
     .exec()
     .then(x => res.status(200).send(x))
 })
 
 router.post('/', (req, res) => {
-    Orders.create(req.body)
+    Meals.create(req.body)
     .then(x => res.status(201).send(x))
 })
 
 router.put('/:id', (req, res) => {
-    Orders.findByIdAndUpdate(req.body.id, req.body)
+    Meals.findByIdAndUpdate(req.body.id, req.body)
     .then(x => res.status(204).send(x))
 })
 
 router.delete('/:id', (req, res) => {
-    Orders.findOneAndDelete(req.params.id)
+    Meals.findOneAndDelete(req.params.id)
     .exec()
     .then(() => res.sendStatus(204))
 })
-module.exports = router// //exportar el router que se acaba de crear
+
+module.exports = router //exportar el router que se acaba de crear
