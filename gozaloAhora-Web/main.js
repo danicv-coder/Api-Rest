@@ -1,4 +1,4 @@
-
+let mealState = []
 
 const stringToHtml = (s) => {
     const parser = new DOMParser()
@@ -6,7 +6,7 @@ const stringToHtml = (s) => {
     return doc.body.firstChild
 }
 const renderItem = (item) => {
-   const element = stringToHtml(`<li data-id="${item._id}">${item.name}</<li>`)
+   const element = stringToHtml(`<li data-id="${item._id}">${item.name}</li>`)
    element.addEventListener('click', () => {
        const mealsList = document.getElementById('meals-list')
        Array.from(mealsList.children).forEach(x => x.classList.remove('selected'))
@@ -17,26 +17,31 @@ const renderItem = (item) => {
    return element
 }
 
-const renderOrder = (order, meals) => {
-    const meal = meals.find(meal => meal._id === order.meal_id)// "find" sirve para buscar elementos en un arreglo
-    const element = stringToHtml(`<li data-id="${order._id}">${meal.name} - ${order.user_id}</<li>`)
-    return element
+const renderOrder = (order,meals) => {
     
+    const meal = meals.find(meal => meal._id === order.meal_id)
+    
+    
+    const element = stringToHtml(`<li data-id="${order._id}">${meal.name} - ${order.user_id}</li>`)
+    
+    
+    return element
 }
-
 window.onload = () => {
     const orderForm = document.getElementById('order')
     orderForm.onsubmit = (e) => {
         e.preventDefault()
-        const mealsId = document.getElementById('meals-id')
-        const mealIdvalue = mealsId.value
-        if(!mealIdvalue){
+        const submit = document.getElementById('submit')
+        submit.setAttribute('disabled', true)
+        const mealId = document.getElementById('meals-id')
+        const mealIdValue = mealId.value
+        if(!mealIdValue){
             alert("Disculpe! Debe seleccionar un Plato...")
             return
         }
 
         const order = {
-            meal_id: mealIdvalue,
+            meal_id: mealIdValue,
             user_id: 'Daniel Calderon',
         }
 
@@ -47,28 +52,40 @@ window.onload = () => {
             },
             body: JSON.stringify(order)
 
-        }).then(x => console.log(x))
+        }).then(x => x.json())
+        .then(respuesta => {
+            const renderedOrder = renderOrder(respuesta, mealState)
+            const ordersList = document.getElementById('orders-list')
+            ordersList.appendChild(renderedOrder)//El método appendChild() inserta un nuevo nodo dentro de la estructura DOM de un documento, y es la segunda parte del proceso central uno-dos, crear-y-añadir
+            submit.removeAttribute('disabled')
+        })
     }
 
     fetch('https://serverless-three-eosin.now.sh/api/meals')
     .then(response => response.json())
     .then(data => {
+        mealState = data
         const mealsList = document.getElementById('meals-list')
         const submit = document.getElementById('submit');
         const listItems = data.map(renderItem)
         listItems.forEach(element => mealsList.appendChild(element))
         mealsList.removeChild(mealsList.firstElementChild)
-        submit.removeAttribute('disabled')// "removeAttribute" me permite selecionar un atributo de un elemento html y eliminarlo
-    })//El "método map"() crea un nuevo array con los resultados de la llamada a la función indicada aplicados a cada uno de sus elementos."join()" une todos los elementos de un array formando una cadena y separándolos con aquel argumento que definamos.
+        submit.removeAttribute('disabled')
+        // "removeAttribute" me permite selecionar un atributo de un elemento html y eliminarlo
+    //El "método map"() crea un nuevo array con los resultados de la llamada a la función indicada aplicados a cada uno de sus elementos."join()" une todos los elementos de un array formando una cadena y separándolos con aquel argumento que definamos.
     fetch('https://serverless-three-eosin.now.sh/api/orders')
     .then(response => response.json())
-    .then(ordersData => {
-        const orderslist = document.getElementById('orders-list')
-        const listOrders = ordersData.map(ordersData => renderOrder(ordersData, data))
-        orderslist.removeChild(orderslist.firstElementChild)
-        listOrders.forEach(element => orderslist.appendChild(element))
-        console.log(ordersData);
-    })
+    .then(orderData => {
+        const ordersList = document.getElementById('orders-list')
 
-    
+        const listOrders = orderData.map(orderData => renderOrder(orderData,data))
+
+        ordersList.removeChild(ordersList.firstElementChild)
+        listOrders.forEach(element => ordersList.appendChild(element))
+
+        ordersList.removeChild(ordersList.firstElementChild)
+        listOrders.forEach(element => ordersList.appendChild(element))
+
+        })
+    })
 }

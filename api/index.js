@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const meals = require('./routes/meals')
 const orders = require('./routes/orders')
+const auth = require('./routes/auth')
 const cors = require('cors')
 const app = express()
 app.use(bodyParser.json())
@@ -12,5 +13,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 app.use('/api/meals', meals) // con use le estoy indicando que utilice el router o ruta de meals
 app.use('/api/orders', orders)// con use le estoy indicando que utilice el router o ruta de orders
+app.use('/api/auth', auth)// con use le estoy indicando que utilice el router o ruta de auth
 
 module.exports = app
