@@ -27,7 +27,7 @@ const renderOrder = (order,meals) => {
     
     return element
 }
-window.onload = () => {
+const inicilizaForm = () => {
     const orderForm = document.getElementById('order')
     orderForm.onsubmit = (e) => {
         e.preventDefault()
@@ -60,7 +60,8 @@ window.onload = () => {
             submit.removeAttribute('disabled')
         })
     }
-
+}
+const inicilizaDatos = () => {
     fetch('https://serverless-three-eosin.now.sh/api/meals')
     .then(response => response.json())
     .then(data => {
@@ -83,9 +84,18 @@ window.onload = () => {
         ordersList.removeChild(ordersList.firstElementChild)
         listOrders.forEach(element => ordersList.appendChild(element))
 
-        ordersList.removeChild(ordersList.firstElementChild)
-        listOrders.forEach(element => ordersList.appendChild(element))
-
         })
     })
+}
+
+window.onload = () => {
+    fetch('https://serverless-three-eosin.now.sh/api/auth/register', {
+        method: 'POST',
+        headers: {
+            'content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: 'daniel.calderon@gmail.com', password: '123456'})
+    })
+    //inicilizaForm()
+    //inicilizaDatos()
 }

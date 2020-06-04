@@ -3,6 +3,7 @@ const router = express.Router()
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const Users = require('../models/Users')
+const { isAuthenticated } = require('../auth')
 
 const signToken = (_id) => {
     return jwt.sign({ _id }, 'mi-secreto', {
@@ -10,8 +11,8 @@ const signToken = (_id) => {
     })
 }
 router.post('/register', (req, res) => {
-    const {email, password} = req.body
-    crypto.randomBytes(16, (err, salt) =>{
+    const { email, password } = req.body
+    crypto.randomBytes(16, (err, salt) => {
         const newSalt = salt.toString('base64')
         crypto.pbkdf2(password, newSalt, 10000, 64, 'sha1', (err, key) => {
             const encryptedPassword = key.toString('base64')
@@ -52,6 +53,8 @@ router.post('/login', (req, res) => {
         })
     })
 })
-
+router.get('/me', isAuthenticated, (req, res) => {
+    res.send(req.user)
+})
 
 module.exports = router //exportar el router que se acaba de crear

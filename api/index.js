@@ -5,6 +5,7 @@ const meals = require('./routes/meals')
 const orders = require('./routes/orders')
 const auth = require('./routes/auth')
 const cors = require('cors')
+
 const app = express()
 app.use(bodyParser.json())
 app.use(cors())// con la libreria cors me permite acceder a una app en el explorador web que no se encuentre en el mismo dominio
