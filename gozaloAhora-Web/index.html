@@ -7,44 +7,47 @@
     <title>gozaloAhora</title>
   </head>
   <body>
+    <div id="app"></div>
+  </body>
+  <template id="login-template">
     <div class="form-main">
       <p class="title-login">Iniciar sesión</p>
-      <form class="login-form">
+      <form class="login-form" id="login-form">
         <div class="campos">
-          <h2>Nombre de usuario</h2>
-        <input placeholder="Nombre de usuario...">
+          <h2>Email</h2>
+          <input id="email" placeholder="Email..." />
         </div>
         <div class="campos">
           <h2>Contraseña</h2>
-        <input placeholder="Contraseña...">
-      </div>
-      <div>
-        <button class="btn">Enviar</button>
-      </div>
+          <input type="password" id="password" placeholder="Contraseña..." />
+        </div>
+        <div>
+          <button class="btn">Enviar</button>
+        </div>
       </form>
     </div>
-    <template id="orders-view">
-      <div id="meals">
-        <ul id="meals-list">
-          <p>Cargando...</p>
-        </ul>
-        <form id="order">
-          <input id="meals-id" type="hidden" />
-          <input
-            type="submit"
-            id="submit"
-            value="Enviar"
-            class="button"
-            disabled
-          />
-        </form>
-      </div>
-      <div id="orders">
-        <ul id="orders-list">
-          <p>Cargando...</p>
-        </ul>
-      </div>
-    </template>
-  </body>
+  </template>
+  <template id="orders-view">
+    <div id="meals">
+      <ul id="meals-list">
+        <p>Cargando...</p>
+      </ul>
+      <form id="order">
+        <input id="meals-id" type="hidden" />
+        <input
+          type="submit"
+          id="submit"
+          value="Enviar"
+          class="button"
+          disabled
+        />
+      </form>
+    </div>
+    <div id="orders">
+      <ul id="orders-list">
+        <p>Cargando...</p>
+      </ul>
+    </div>
+  </template>
   <script src="main.js"></script>
 </html>
